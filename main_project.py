@@ -3,6 +3,7 @@ import logging
 import csv
 from Models.ResNextModel import ResNextModel
 from Models.SwinV2Model import SwinV2Model
+from DataHandling import DataHandler
 
 training_run_id = 1
 project_directory ='/home/paul.uhrich/Project/Data'
@@ -46,21 +47,30 @@ logger.info(f'Starting Transfer Learn for Run {training_run_id}')
 
 device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
 
-logger.info(device)
+logger.info(f'Using device {device}\n')
+
+#We need a datahandler to be shared between all runs so that the data in train/eval/test is the same
+
+data_handler = DataHandler(project_directory, grain_type)
 
 batch_sizes = [16, 32, 64, 128]
 learning_rates = [0.01, 0.001, 0.0001]
 
 models_to_test = [
-    ResNextModel(project_directory, grain_type, device, logger),
-    SwinV2Model(project_directory, grain_type, device, logger)
+    SwinV2Model(device, logger, data_handler),
+    ResNextModel(device, logger, data_handler)
 ]
 
-for lr in learning_rates:
-    for bs in batch_sizes:
-        for model in models_to_test:
-            model.prepare_model(lr, bs)
-            best_model = model.train_model(30)
-            model.test_model(best_model)
+for model in models_to_test:
+    for lr in learning_rates:
+        for bs in batch_sizes:
+            try:
+                logger.info(f'Starting model train on {model.__class__.__name__} at learning Rate {lr} and batch size {bs}')
+                model.prepare_model(lr, bs)
+                best_model = model.train_model(10)
+                model.test_model()
+            except Exception as e:
+                logger.error(f'An error occured within model {model.__class__.__name__} at Learning Rate {lr} and Batch size {bs}: Error {e}')
+                continue
 
 

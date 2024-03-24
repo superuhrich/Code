@@ -1,9 +1,6 @@
 from DataHandling import DataHandler
 
-class BaseModelInterface(DataHandler):
-  def __init__(self, path, crop):
-    super().__init__(path,crop)
-
+class BaseModelInterface:
   def prepare_model(self, learning_rate, batch_size):
      raise NotImplementedError("Must implement prepare_model method")
 

@@ -91,18 +91,18 @@ class TrainEvalTest:
             #log the details to csv
             with open(self.log_csv_filepath, mode='a', newline='') as csv_file:
                 writer = csv.writer(csv_file)
-                writer.writerow([self.model_name, self.batch_size, self.learning_rate, phase, epoch+1, epoch_loss, epoch_acc, epochs_not_improved])
+                writer.writerow([self.model_name, self.batch_size, self.learning_rate, phase, epoch+1, epoch_loss, epoch_acc.item(), epochs_not_improved])
 
             #track number of epochs without accuracy change if not improving, stop the model
                 
             
-            if(epochs_not_improved > 5):
+            if(epochs_not_improved > 0):
                 self.logger.info("EARLY STOPPING\n")
                 time_elapsed = time.time() - starting_time
                 self.logger.info('Training complete in {:.0f}m {:.0f}s'.format(
                 time_elapsed // 60, time_elapsed % 60))
-                self.logger.info('Best Validation Acc: {:4f}'.format(max_accuracy))
-                self.logger.info('Best Validation Acc: {:4f}'.format(max_accuracy))
+                # self.logger.info('Best Validation Acc: {:4f}'.format(max_accuracy))
+                self.logger.info('Best Validation Acc: {:4f}\n'.format(max_accuracy))
                 # self.logger.info('Loss per epoch (Training): {}'.format(train_loss_list))
                 # self.logger.info('Accuracy per epoch(Training): {}'.format(train_acc_list))
                 # self.logger.info('Loss per epoch (Validation): {}'.format(val_loss_list))
@@ -116,17 +116,17 @@ class TrainEvalTest:
     time_elapsed = time.time() - starting_time
     self.logger.info('Training complete in {:.0f}m {:.0f}s'.format(
         time_elapsed // 60, time_elapsed % 60))
-    self.logger.info('Best Validation Acc: {:4f}'.format(max_accuracy))
-    self.logger.info('Loss per epoch (Training): {}'.format(train_loss_list))
-    self.logger.info('Accuracy per epoch(Training): {}'.format(train_acc_list))
-    self.logger.info('Loss per epoch (Validation): {}'.format(val_loss_list))
-    self.logger.info('Accuracy per epoch(Validation): {}'.format(val_acc_list))
+    self.logger.info('Best Validation Acc: {:4f}\n'.format(max_accuracy))
+    # self.logger.info('Loss per epoch (Training): {}'.format(train_loss_list))
+    # self.logger.info('Accuracy per epoch(Training): {}'.format(train_acc_list))
+    # self.logger.info('Loss per epoch (Validation): {}'.format(val_loss_list))
+    # self.logger.info('Accuracy per epoch(Validation): {}'.format(val_acc_list))
 
     # load best model weights
     self.model.load_state_dict(best_model)
     return self.model
   
-  def test_model(self, model):
+  def test_model(self):
     culm_loss = 0 # total culmulative loss
     culm_correct = 0
     all_predictions = []
@@ -137,7 +137,7 @@ class TrainEvalTest:
         labels = labels.to(self.device)
 
         with torch.set_grad_enabled(False):
-            outputs = model(inputs)
+            outputs = self.model(inputs)
             i, predictions = torch.max(outputs, 1)
             loss = self.criterion(outputs, labels)
         culm_loss += loss.item() * inputs.size(0)
@@ -149,17 +149,17 @@ class TrainEvalTest:
     test_loss = culm_loss / self.dataset_sizes['Test']
     test_acc = culm_correct / self.dataset_sizes['Test']
 
-    self.logger.info(all_labels)
+    # self.logger.info(all_labels)
     cm = confusion_matrix(all_labels, all_predictions)
-    self.logger.info('Test Case Loss: {:.4f} Accuracy: {:.4f}'.format(
+    self.logger.info('Test Case Loss: {:.4f} Accuracy: {:.4f}\n'.format(
             test_loss, test_acc))
     #Put the confusion matrix into a csv
     with open(self.confusion_matrix_csv, mode='a', newline='') as csv_file:
       writer = csv.writer(csv_file)
-      writer.writerow([self.model_name, self.batch_size, self.learning_rate, test_acc, test_loss, cm.flatten()])
+      writer.writerow([self.model_name, self.batch_size, self.learning_rate, test_acc.item(), test_loss, cm.flatten()])
 
     # self.logger.info('Confusion Matrix:')
     # for row in cm:
     #     self.logger.info(' '.join([str(elem) for elem in row]))
     # self.logger.info(cm)
-    self.logger.info('\n')
+    # self.logger.info('\n')
