@@ -89,7 +89,7 @@ class DataHandler:
                 self.datasets[x],
                 batch_size=batch_size,
                 shuffle=(x =="Train"),
-                num_workers=4
+                num_workers=2
             )
 
     dataset_sizes = {x: len(self.datasets[x]) for x in ['Train', 'Validation', 'Test']}

@@ -24,7 +24,7 @@ with open(confusion_matrix_path, mode='w', newline='') as csv_file:
 logger = logging.getLogger(f'Run{training_run_id}')
 logger.setLevel(logging.INFO)
 
-file_handler = logging.FileHandler(f'/home/paul.uhrich/Project/Logs/Run{training_run_id}/runLog.log')
+file_handler = logging.FileHandler(f'/home/paul.uhrich/Project/Logs/runLog.log')
 file_handler.setLevel(logging.INFO)
 
 console_handler = logging.StreamHandler()

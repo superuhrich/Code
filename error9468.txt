@@ -1,7 +1,0 @@
-2024-03-24 06:18:42,172 - Run1 - INFO - Starting Transfer Learn for Run 1
-2024-03-24 06:18:42,338 - Run1 - INFO - cuda:0
-Traceback (most recent call last):
-  File "/home/paul.uhrich/Project/Code/main_project.py", line 55, in <module>
-    ResNextModel(project_directory, grain_type, device, logger),
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-TypeError: ResNextModel.__init__() missing 2 required positional arguments: 'learning_rate' and 'batch_size'
