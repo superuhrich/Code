@@ -21,7 +21,7 @@ class TrainEvalTest:
     self.confusion_matrix_csv = '/home/paul.uhrich/Project/Logs/confusion_matrix_log.csv'
 
   
-  def train_model(self, epochs):
+  def train_model(self, epochs, patience):
     starting_time = time.time()
     max_accuracy = 0
     best_model = copy.deepcopy(self.model.state_dict())
@@ -96,7 +96,7 @@ class TrainEvalTest:
             #track number of epochs without accuracy change if not improving, stop the model
                 
             
-            if(epochs_not_improved > 0):
+            if(epochs_not_improved > patience):
                 self.logger.info("EARLY STOPPING\n")
                 time_elapsed = time.time() - starting_time
                 self.logger.info('Training complete in {:.0f}m {:.0f}s'.format(

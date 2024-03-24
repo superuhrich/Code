@@ -67,7 +67,7 @@ for model in models_to_test:
             try:
                 logger.info(f'Starting model train on {model.__class__.__name__} at learning Rate {lr} and batch size {bs}')
                 model.prepare_model(lr, bs)
-                best_model = model.train_model(10)
+                best_model = model.train_model(30,5)
                 model.test_model()
             except Exception as e:
                 logger.error(f'An error occured within model {model.__class__.__name__} at Learning Rate {lr} and Batch size {bs}: Error {e}')
