@@ -8,10 +8,9 @@ from torch.utils.data import DataLoader, Dataset
 import numpy as np
 
 class DataHandler:
-  def __init__(self, path, crop, batch_size):
+  def __init__(self, path, crop):
     self.path = path
     self.crop = crop
-    self.batch_size = batch_size
     self.mean = [0.485, 0.456, 0.406]
     self.std = [0.229, 0.224, 0.225]
     self.labels = [[], [], []]  # List to hold three lists, one for each set
@@ -55,7 +54,7 @@ class DataHandler:
       transforms.Resize(256, interpolation=InterpolationMode.BICUBIC),  # Resize images to 256x256 using bilinear interpolation
       transforms.CenterCrop(256),
       transforms.RandomHorizontalFlip(),
-      transforms.RandomRotation(),
+      transforms.RandomRotation(180),
       transforms.ToTensor(),  # Convert images to Tensor
       transforms.Normalize(self.mean, self.std)  # CHANGE THESE TO THE TRAINF MEAN ANS STD
       ]),
@@ -81,14 +80,14 @@ class DataHandler:
     } 
 
 
-  def get_data(self):
+  def get_data(self, batch_size):
 
     data_loaders = {}
     for x in self.datasets.keys():
         if x is not None:
             data_loaders[x] = DataLoader(
                 self.datasets[x],
-                batch_size=self.batch_size,
+                batch_size=batch_size,
                 shuffle=(x =="Train"),
                 num_workers=4
             )

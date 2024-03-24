@@ -7,10 +7,14 @@ from LearningAndTesting import TrainEvalTest
 
 
 class SwinV2Model(BaseModelInterface):
-  def __init__(self, path, crop, device, logger, learning_rate, batch_size):
-    super().__init__(path, crop, batch_size)
+  def __init__(self, path, crop, device, logger):
+    super().__init__(path, crop)
     self.device = device
     self.logger = logger
+    self.model = None
+    self.trainer_evaluator = None
+    
+  def prepare_model(self, learning_rate, batch_size):
 
     model_name = 'swin_v2_small_path4_window8_256'
     model = timm.create_model(model_name, pretrained=True, num_classes=7)
@@ -32,7 +36,7 @@ class SwinV2Model(BaseModelInterface):
 
     self.model = model
 
-    data_loaders, dataset_sizes = self.get_data()
+    data_loaders, dataset_sizes = self.get_data(batch_size)
 
     self.trainer_evaluator = TrainEvalTest(model, criterion, optimizer, scheduler, data_loaders, dataset_sizes, self.device, self.logger, self.__class__.__name__, learning_rate, batch_size)  
 

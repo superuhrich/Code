@@ -59,6 +59,7 @@ models_to_test = [
 for lr in learning_rates:
     for bs in batch_sizes:
         for model in models_to_test:
+            model.prepare_model(lr, bs)
             best_model = model.train_model(30)
             model.test_model(best_model)
 
