@@ -4,7 +4,7 @@ class BaseModelInterface:
   def prepare_model(self, learning_rate, batch_size):
      raise NotImplementedError("Must implement prepare_model method")
 
-  def train_model(self, epochs):
+  def train_model(self, epochs, patience):
       raise NotImplementedError("Must implement train_model method")
 
   def test_model(self):

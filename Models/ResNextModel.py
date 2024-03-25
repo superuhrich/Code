@@ -41,8 +41,8 @@ class ResNextModel(BaseModelInterface):
     self.trainer_evaluator = TrainEvalTest(model, criterion, optimizer, scheduler, data_loaders, dataset_sizes, self.device, self.logger, self.__class__.__name__, learning_rate, batch_size)
 
   
-  def train_model(self, epochs):
-    self.trainer_evaluator.train_model(epochs)
+  def train_model(self, epochs, patience):
+    self.trainer_evaluator.train_model(epochs, patience)
 
   def test_model(self):
     self.trainer_evaluator.test_model()
