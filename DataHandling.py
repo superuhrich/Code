@@ -53,8 +53,8 @@ class DataHandler:
       'Train': transforms.Compose([
       transforms.Resize(256, interpolation=InterpolationMode.BICUBIC),  # Resize images to 256x256 using bilinear interpolation
       transforms.CenterCrop(256),
-      transforms.RandomHorizontalFlip(),
-      transforms.RandomRotation(180),
+      # transforms.RandomHorizontalFlip(),
+      # transforms.RandomRotation(180),
       transforms.ToTensor(),  # Convert images to Tensor
       transforms.Normalize(self.mean, self.std)  # CHANGE THESE TO THE TRAINF MEAN ANS STD
       ]),
