@@ -61,7 +61,6 @@ models_to_test = [
     SwinV2Model(device, logger, data_handler),
     ResNextModel(device, logger, data_handler),
     EfficientNet0Model(device, logger, data_handler)
-
 ]
 
 for model in models_to_test:
