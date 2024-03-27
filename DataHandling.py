@@ -49,38 +49,40 @@ class DataHandler:
     self.file_paths = [np.array(sublist) for sublist in self.file_paths]
     self.label_idxs = [np.array(sublist) for sublist in self.label_idxs]    
 
+   
+
+
+  def get_data(self, batch_size, interpolation_mode, resolution, crop):
+
     transform = {
-      'Train': transforms.Compose([
-      transforms.Resize(256, interpolation=InterpolationMode.BICUBIC),  # Resize images to 256x256 using bilinear interpolation
-      transforms.CenterCrop(256),
-      transforms.RandomHorizontalFlip(),
-      transforms.RandomRotation(180),
-      transforms.ToTensor(),  # Convert images to Tensor
-      transforms.Normalize(self.mean, self.std)  # CHANGE THESE TO THE TRAINF MEAN ANS STD
-      ]),
+    'Train': transforms.Compose([
+    transforms.Resize(resolution, interpolation=interpolation_mode),  # Resize images to 256x256 using bilinear interpolation
+    transforms.CenterCrop(crop),
+    # transforms.RandomHorizontalFlip(),
+    # transforms.RandomRotation(180),
+    transforms.ToTensor(),  # Convert images to Tensor
+    transforms.Normalize(self.mean, self.std)  # CHANGE THESE TO THE TRAINF MEAN ANS STD
+    ]),
 
-      'Validation': transforms.Compose([
-      transforms.Resize(256, interpolation=InterpolationMode.BICUBIC),  # Resize images to 256x256 using bilinear interpolation
-      transforms.CenterCrop(256),
-      transforms.ToTensor(),  # Convert images to Tensor
-      transforms.Normalize(self.mean, self.std)  # CHANGE THESE TO THE TRAINF MEAN ANS STD
-      ]),
+    'Validation': transforms.Compose([
+    transforms.Resize(resolution, interpolation=interpolation_mode),  # Resize images to 256x256 using bilinear interpolation
+    transforms.CenterCrop(crop),
+    transforms.ToTensor(),  # Convert images to Tensor
+    transforms.Normalize(self.mean, self.std)  # CHANGE THESE TO THE TRAINF MEAN ANS STD
+    ]),
 
-      'Test': transforms.Compose([
-      transforms.Resize(256, interpolation=InterpolationMode.BICUBIC),  # Resize images to 256x256 using bilinear interpolation
-      transforms.CenterCrop(256),
-      transforms.ToTensor(),  # Convert images to Tensor
-      transforms.Normalize(self.mean, self.std)  # CHANGE THESE TO THE TRAINF MEAN ANS STD
-    ])}
+    'Test': transforms.Compose([
+    transforms.Resize(resolution, interpolation=interpolation_mode),  # Resize images to 256x256 using bilinear interpolation
+    transforms.CenterCrop(crop),
+    transforms.ToTensor(),  # Convert images to Tensor
+    transforms.Normalize(self.mean, self.std)  # CHANGE THESE TO THE TRAINF MEAN ANS STD
+  ])}
 
     self.datasets = {
       'Train': CustomDataset(self.file_paths[0], self.label_idxs[0], transform['Train']),
       'Validation': CustomDataset(self.file_paths[1], self.label_idxs[1], transform['Validation']),
       'Test': CustomDataset(self.file_paths[2], self.label_idxs[2], transform['Test'])
     } 
-
-
-  def get_data(self, batch_size):
 
     data_loaders = {}
     for x in self.datasets.keys():

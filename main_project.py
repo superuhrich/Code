@@ -54,8 +54,8 @@ logger.info(f'Using device {device}\n')
 
 data_handler = DataHandler(project_directory, grain_type)
 
-batch_sizes = [16, 32, 64, 128]
-learning_rates = [0.01, 0.001, 0.0001]
+batch_sizes = [16, 32, 64]
+learning_rates = [0.1, 0.01]
 
 models_to_test = [
     SwinV2Model(device, logger, data_handler),
