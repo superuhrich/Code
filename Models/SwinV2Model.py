@@ -4,6 +4,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.optim import lr_scheduler
 from LearningAndTesting import TrainEvalTest
+from torchvision.transforms import InterpolationMode
 
 
 class SwinV2Model(BaseModelInterface):
@@ -16,7 +17,7 @@ class SwinV2Model(BaseModelInterface):
     
   def prepare_model(self, learning_rate, batch_size):
 
-    model = torchvision.models.swin_v2_s(weights=torchvision.models.Swin_V2_S_Weights.DEFAULT)
+    model = torchvision.models.swin_v2_b(weights=torchvision.models.Swin_V2_B_Weights.DEFAULT)
 
     for param in model.parameters():
       param.requires_grad = False
@@ -35,7 +36,7 @@ class SwinV2Model(BaseModelInterface):
 
     self.model = model
 
-    data_loaders, dataset_sizes = self.data_handler.get_data(batch_size)
+    data_loaders, dataset_sizes = self.data_handler.get_data(batch_size, InterpolationMode.BICUBIC, 272,256)
 
     self.trainer_evaluator = TrainEvalTest(model, criterion, optimizer, scheduler, data_loaders, dataset_sizes, self.device, self.logger, self.__class__.__name__, learning_rate, batch_size)  
 

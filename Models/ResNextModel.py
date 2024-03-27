@@ -4,6 +4,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.optim import lr_scheduler
 from LearningAndTesting import TrainEvalTest
+from torchvision.transforms import InterpolationMode
 
 class ResNextModel(BaseModelInterface):
   def __init__(self, device, logger, data_handler):
@@ -16,7 +17,7 @@ class ResNextModel(BaseModelInterface):
 
   def prepare_model(self, learning_rate, batch_size):
 
-    model = torchvision.models.resnext50_32x4d(weights='IMAGENET1K_V1')
+    model = torchvision.models.resnext101_64x4d(weights=torchvision.models.ResNeXt101_64X4D_Weights.DEFAULT)
 
     #freeze convolutional layers
     for param in model.parameters():
@@ -36,7 +37,7 @@ class ResNextModel(BaseModelInterface):
 
     self.model = model
 
-    data_loaders, dataset_sizes = self.data_handler.get_data(batch_size)
+    data_loaders, dataset_sizes = self.data_handler.get_data(batch_size, InterpolationMode.BILINEAR, 232, 224)
 
     self.trainer_evaluator = TrainEvalTest(model, criterion, optimizer, scheduler, data_loaders, dataset_sizes, self.device, self.logger, self.__class__.__name__, learning_rate, batch_size)
 
