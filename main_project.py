@@ -3,6 +3,7 @@ import logging
 import csv
 from Models.ResNextModel import ResNextModel
 from Models.SwinV2Model import SwinV2Model
+from Models.EfficienetV0 import EfficientNet0Model
 from DataHandling import DataHandler
 
 training_run_id = 1
@@ -59,6 +60,7 @@ learning_rates = [0.1, 0.01]
 models_to_test = [
     SwinV2Model(device, logger, data_handler),
     ResNextModel(device, logger, data_handler),
+    EfficientNet0Model(device, logger, data_handler)
 
 ]
 
