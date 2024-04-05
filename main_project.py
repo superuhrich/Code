@@ -3,7 +3,14 @@ import logging
 import csv
 from Models.ResNextModel import ResNextModel
 from Models.SwinV2Model import SwinV2Model
-from Models.EfficienetV0 import EfficientNet0Model
+from Models.Efficientnet_b0 import efficientnet_b0_model
+from Models.Efficientnet_b1 import efficientnet_b1_model 
+from Models.Efficientnet_b2 import efficientnet_b2_model 
+from Models.Efficientnet_b3 import efficientnet_b3_model 
+from Models.Efficientnet_b4 import efficientnet_b4_model 
+from Models.Efficientnet_b5 import efficientnet_b5_model
+from Models.Efficientnet_b6 import efficientnet_b6_model 
+from Models.Efficientnet_b7 import efficientnet_b7_model 
 from DataHandling import DataHandler
 
 training_run_id = 1
@@ -54,13 +61,20 @@ logger.info(f'Using device {device}\n')
 
 data_handler = DataHandler(project_directory, grain_type)
 
-batch_sizes = [16, 32, 64]
-learning_rates = [0.1, 0.01]
+batch_sizes = [8, 16, 32, 64, 128]
+learning_rates = [0.1, 0.01, 0.001, 0.0001]
 
 models_to_test = [
-    SwinV2Model(device, logger, data_handler),
-    ResNextModel(device, logger, data_handler),
-    EfficientNet0Model(device, logger, data_handler)
+        SwinV2Model(device, logger, data_handler),
+        ResNextModel(device, logger, data_handler),
+        efficientnet_b0_model(device, logger, data_handler),
+        efficientnet_b1_model(device, logger, data_handler),
+        efficientnet_b2_model(device, logger, data_handler),
+        efficientnet_b3_model(device, logger, data_handler),
+        efficientnet_b4_model(device, logger, data_handler),
+        efficientnet_b5_model(device, logger, data_handler),
+        efficientnet_b6_model(device, logger, data_handler),
+        efficientnet_b7_model(device, logger, data_handler),
 ]
 
 for model in models_to_test:
